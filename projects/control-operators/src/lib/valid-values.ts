@@ -1,4 +1,4 @@
-import { AbstractControl } from "@angular/forms";
+import { AbstractControl, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
 
@@ -7,7 +7,8 @@ import { filter } from "rxjs/operators";
  * @param control target control
  * @returns changes in value which are valid
  */
-export function validValues(control: AbstractControl): Observable<any> {
+export function validValues<T>(control: FormControl<T>): Observable<T>;
+export function validValues<T>(control: AbstractControl<T>): Observable<T> {
     return control.valueChanges.pipe(
         filter(_ => control.status == 'VALID')
     )
