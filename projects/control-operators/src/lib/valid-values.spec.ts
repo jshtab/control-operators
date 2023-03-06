@@ -1,4 +1,4 @@
-import { FormControl, ValidatorFn } from "@angular/forms";
+import { UntypedFormControl, ValidatorFn } from "@angular/forms";
 import { validValues } from "./valid-values";
 
 
@@ -6,7 +6,7 @@ describe('validValues', () => {
     it('should only emit values when the form control is valid', () => {
         let valid = true;
         const validator: ValidatorFn = (control) => control.value == 'invalid value' ? {invalid: true} : null;
-        const control = new FormControl("", {validators: [validator]});
+        const control = new UntypedFormControl("", {validators: [validator]});
         const spy = jasmine.createSpy('subscriber');
         validValues(control).subscribe(spy);
         

@@ -11,7 +11,7 @@
   "author": "Jacob Shtabnoy",
   "license": "ISC",
   "peerDependencies": {
-    "@angular/forms": "^12, ^13",
+    "@angular/forms": "^14.0.0 || ^15.0.0",
     "rxjs": "^7.4"
   },
   "dependencies": {
