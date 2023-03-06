@@ -1,27 +1,31 @@
-# ControlOperators
+# Control Operators
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.18.
+RxJS operators for Angular form controls that simply adding side-effects to reactive forms.
 
-## Development server
+## Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+For **Angular 14-15**, use the latest version of the package from npm. This will include type support.
+```sh
+npm install ngx-control-operators
+```
 
-## Code scaffolding
+For **Angular 12 to 14**, use version 1 explicitly when installing. This version does not include type support.
+```sh
+npm install ngx-control-operators@1
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Both versions are supported as of March 2023 and features from the latest version will be backported to the 1.x branch.
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Use it like the `rxjs/operators` package, just import the operator you want and use it in a pipe.
 
-## Running unit tests
+```ts
+import { disableControl } from "ngx-control-operators"
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+this.guestCount.valueChanges.pipe(
+    map((val) => val < 10),
+    disableControl(this.largePartyOptions)
+).subscribe()
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```

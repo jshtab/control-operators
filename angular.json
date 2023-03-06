@@ -3,5 +3,37 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "control-operators": {
+      "projectType": "library",
+      "root": "projects/control-operators",
+      "sourceRoot": "projects/control-operators/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/control-operators/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/control-operators/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/control-operators/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/control-operators/src/test.ts",
+            "tsConfig": "projects/control-operators/tsconfig.spec.json",
+            "karmaConfig": "projects/control-operators/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "control-operators"
 }
