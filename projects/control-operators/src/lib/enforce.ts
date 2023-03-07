@@ -21,3 +21,13 @@ export function enforce<T>(control: AbstractControl, validators: ValidatorFn[]):
         tap(active => active ? control.addValidators(validators) : control.removeValidators(validators)),
     )
 }
+
+/**
+ * Applies validators to a control for each truthy emission, removes them otherwise.
+ * 
+ * @see {@link enforce}
+ * @param control - target to apply validators
+ * @param validators - the validator functions to apply/remove
+ * @returns operator function
+ */
+export const applyValidators = enforce;
