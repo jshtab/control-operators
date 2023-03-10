@@ -102,21 +102,29 @@ import { applyValidators } from "ngx-control-operators";
 import { FormControl, Validators } from "@angular/forms";
 
 const control = new FormControl("");
-const whetherToApply = new Subject<boolean>();
 
-whetherToApply.pipe( // required if true
+const conditionA = new Subject<boolean>();
+const conditionB = new Subject<boolean>();
+
+conditionA.pipe(
     applyValidators(control, [Validators.required])
 ).subscribe()
 
-whetherToApply.pipe( // required if false
-    map(value => !value),
+conditionB.pipe(
     applyValidators(control, [Validators.required])
 ).subscribe()
 
-console.log(control.valid); // true
-whetherToApply.next(true);
-// first pipe adds Validators.required
-// second pipe gets false and removes Validators.required
+conditionA.next(true);
+control.updateValueAndValidity();
+console.log(control.valid); // false
+
+conditionB.next(true);
+control.updateValueAndValidity();
+console.log(control.valid); // false
+
+// this is the unexpected behavior. 'conditionB' is still true,
+// but because conditionA emits false, applyValidators removes the validator.
+conditionA.next(false);
 control.updateValueAndValidity();
 console.log(control.valid); // true
 ```
@@ -127,19 +135,29 @@ If a validator relies on multiple conditions, combine them into one observable s
 const control = new FormControl("");
 
 const conditionA = new Subject<boolean>();
-const conditionB = conditionA.pipe(
-    map(value => !value)
-);
+const conditionB = new Subject<boolean>();
 
 combineLatest([conditionA, conditionB]).pipe(
     map(([a, b]) => a || b),
     applyValidators(control, [Validators.required])
 ).subscribe()
 
-console.log(control.valid); // true
 conditionA.next(true);
 control.updateValueAndValidity();
 console.log(control.valid); // false
+
+conditionB.next(true);
+control.updateValueAndValidity();
+console.log(control.valid); // false
+
+// this case now works as expected.
+conditionA.next(false);
+control.updateValueAndValidity();
+console.log(control.valid); // false
+
+conditionB.next(false);
+control.updateValueAndValidity();
+console.log(control.valid); // true
 ```
 
 ## validValues
@@ -155,14 +173,17 @@ Creates an observable of all valid [valueChanges] from the given control.
 import { FormControl, Validators } from "@angular/forms";
 import { validValues } from "ngx-control-operators";
 
-const control = new FormControl<string|null>(null, {validators: [Validators.required]});
+const control = new FormControl(null, {
+    validators: [Validators.required]
+});
 
+// print all valid values of 'control' to the console
 validValues(control).subscribe(console.log);
 
-control.setValue("");         // (no log)
-console.log(control.valid)    // false
-control.setValue("something") // "something"
-console.log(control.valid)    // true
-control.setValue("");         // (no log)
+control.setValue("");         // no log, this value is invalid
+console.log(control.valid)    // log: false
+control.setValue("something") // log: "something"
+console.log(control.valid)    // log: true
+control.setValue("");         // no log, this value is invalid
 ```
 
