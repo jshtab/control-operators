@@ -4,12 +4,12 @@ RxJS operators for Angular form controls that simply adding side-effects to reac
 
 ## Installation
 
-For **Angular 14-15**, use the latest version of the package from npm. This will include type support.
+For **Angular 14+**, use the latest version of the package from npm. This will include type support.
 ```sh
 npm install ngx-control-operators
 ```
 
-For **Angular 12 to 14**, use version 1 explicitly when installing. This version does not include type support.
+For **Angular 12 and 13**, use version 1 explicitly when installing. This version does not include type support.
 ```sh
 npm install ngx-control-operators@1
 ```
